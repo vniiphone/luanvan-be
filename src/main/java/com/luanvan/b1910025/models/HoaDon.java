@@ -1,7 +1,10 @@
 package com.luanvan.b1910025.models;
 
 
-import org.joda.time.DateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -10,57 +13,134 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hoaDon")
+@Builder
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class HoaDon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    private String ngayGioTao;
-
-    @NotNull
-    @Min(0)
     private double totalPrice;
-
-    @JoinColumn(name = "user_id")
-    @ManyToOne()
-    private User user;
-
-    @NotNull
     private boolean wasPay;
-
-    @NotNull
     private String paymentMethod;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+    @NotNull
+    private String timeCreate;
+
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hoaDon", orphanRemoval = true)
-    private List<Booking> bookingList = new ArrayList<>();
+    private List<Booking> bookings = new ArrayList<>();
 
-    @JoinColumn(name = "diaChi_id")
-    @OneToOne
+    @JoinColumn(name = "tour_id")
+    @ManyToOne
+    private Tour tour;
+
+    private long soLuongVeDaDat;
+
+    public long getSoLuongVeDaDat() {
+        return soLuongVeDaDat;
+    }
+
+    public void setSoLuongVeDaDat(long soLuongVeDaDat) {
+        this.soLuongVeDaDat = soLuongVeDaDat;
+    }
+
+    /*
+    @JsonIgnore
+    @JoinColumn(name = "dia_chi_id")
+    @ManyToOne
     private DiaChi diaChi;
+*/
 
-    public HoaDon( String ngayGioTao,
-                  double totalPrice, User user,
-                  boolean wasPay, String paymentMethod,
-                  List<Booking> bookingList, DiaChi diaChi) {
-        super();
+    public Tour getTour() {
+        return tour;
+    }
 
-        this.ngayGioTao = ngayGioTao;
+    public void setTour(Tour tour) {
+        this.tour = tour;
+    }
+
+    @JoinColumn(name = "profile_id")
+    @ManyToOne
+    private Profile profile;
+
+    public HoaDon() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+  /*  public HoaDon(
+            User user,
+            @NotNull String timeCreate,
+            @NotNull String paymentMethod,
+            @NotNull @Min(0) double totalPrice,
+            @NotNull boolean wasPay,
+            List<Booking> bookings,
+            Profile profile) {
         this.totalPrice = totalPrice;
-        this.user = user;
         this.wasPay = wasPay;
         this.paymentMethod = paymentMethod;
-        this.bookingList = bookingList;
-        this.diaChi = diaChi;
+        this.user = user;
+        this.timeCreate = timeCreate;
+        this.profile = profile;
+        this.bookings = bookings;
+    }*/
+
+    public HoaDon(
+            User user,
+            @NotNull   String paymentMethod,
+            @NotNull   String timeCreate,
+            double totalPrice,
+            boolean wasPay,
+            List<Booking> bookings,
+            Tour tour,
+            long soLuongVeDaDat,
+            Profile profile) {
+        this.totalPrice = totalPrice;
+        this.wasPay = wasPay;
+        this.paymentMethod = paymentMethod;
+        this.user = user;
+        this.timeCreate = timeCreate;
+        this.bookings = bookings;
+        this.tour = tour;
+        this.soLuongVeDaDat = soLuongVeDaDat;
+        this.profile = profile;
     }
 
-    public String getNgayGioTao() {
-        return ngayGioTao;
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setNgayGioTao(String ngayGioTao) {
-        this.ngayGioTao = ngayGioTao;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public String getTimeCreate() {
+        return timeCreate;
+    }
+
+    public void setTimeCreate(String timeCreate) {
+        this.timeCreate = timeCreate;
     }
 
     public double getTotalPrice() {
@@ -69,14 +149,6 @@ public class HoaDon {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public boolean isWasPay() {
@@ -95,31 +167,20 @@ public class HoaDon {
         this.paymentMethod = paymentMethod;
     }
 
-    public List<Booking> getBookingList() {
-        return bookingList;
+    public User getUser() {
+        return user;
     }
 
-    public void setBookingList(List<Booking> bookingList) {
-        this.bookingList = bookingList;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public DiaChi getDiaChi() {
+
+/*    public DiaChi getDiaChi() {
         return diaChi;
     }
 
     public void setDiaChi(DiaChi diaChi) {
         this.diaChi = diaChi;
-    }
-
-    public HoaDon() {
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    }*/
 }

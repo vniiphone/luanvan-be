@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HanhKhachRepo extends JpaRepository<HanhKhach, Long>, JpaSpecificationExecutor<HanhKhach> {
+public interface HanhKhachRepo extends JpaRepository<HanhKhach, Long>{
+
+
 }

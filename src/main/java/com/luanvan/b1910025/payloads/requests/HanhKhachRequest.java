@@ -1,6 +1,7 @@
 package com.luanvan.b1910025.payloads.requests;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class HanhKhachRequest {
 
@@ -15,6 +16,17 @@ public class HanhKhachRequest {
 
     @NotBlank(message = "Phải có địa chỉ HK")
     private String diaChiHK;
+
+    @NotNull(message = "ID Booking")
+    private Long bookingId;
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
 
     public String getHoTenHK() {
         return hoTenHK;
@@ -45,6 +57,17 @@ public class HanhKhachRequest {
     }
 
     public void setDiaChiHK(String diaChiHK) {
+        this.diaChiHK = diaChiHK;
+    }
+
+    public HanhKhachRequest(){
+        super();
+    }
+    public HanhKhachRequest(String hoTenHK, String sdtHK, int doTuoiHK, String diaChiHK) {
+        super();
+        this.hoTenHK = hoTenHK;
+        this.sdtHK = sdtHK;
+        this.doTuoiHK = doTuoiHK;
         this.diaChiHK = diaChiHK;
     }
 }

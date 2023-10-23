@@ -1,6 +1,10 @@
 package com.luanvan.b1910025.models;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +19,9 @@ import java.util.Set;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email"),
 })
+@Data
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -40,23 +47,6 @@ public class User {
 
     private String avatar_url;
 
-    public String getAvatar_url() {
-        return avatar_url;
-    }
-
-    public void setAvatar_url(String avatar_url) {
-        this.avatar_url = avatar_url;
-    }
-
-    public User() {
-    }
-
-    public User(Long id, String username, String email, String password, String role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
     public Long getId() {
         return id;
@@ -95,6 +85,22 @@ public class User {
     }
 
     public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getAvatar_url() {
+        return avatar_url;
+    }
+
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
+    }
+    public User() {
+    }
+    public User(String username, String email, String password, String role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
         this.role = role;
     }
 

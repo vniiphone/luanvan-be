@@ -5,6 +5,16 @@ import javax.validation.constraints.NotNull;
 
 public class KhachSanRequest {
 
+//    private Long id;
+//
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+
     @NotBlank
     private String name;
 
@@ -16,6 +26,24 @@ public class KhachSanRequest {
 
     @NotNull
     private Double giaPhong;
+
+    @NotNull(message="lichTrinhTour_id: null")
+    private Long lichTrinhTour_id;
+
+    public KhachSanRequest(String name, String phone, String diaChiKsan, Double giaPhong) {
+        this.name = name;
+        this.phone = phone;
+        this.diaChiKsan = diaChiKsan;
+        this.giaPhong = giaPhong;
+    }
+
+    public Long getLichTrinhTour_id() {
+        return lichTrinhTour_id;
+    }
+
+    public void setLichTrinhTour_id(Long lichTrinhTour_id) {
+        this.lichTrinhTour_id = lichTrinhTour_id;
+    }
 
     public String getName() {
         return name;

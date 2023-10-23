@@ -6,16 +6,21 @@ public class LoaiTourRequest {
 
     @NotBlank(message = "Name is required")
     private String name;
-
     @NotBlank(message = "noiDung is required")
     private String noiDung;
 
+    public LoaiTourRequest(String name, String noiDung) {
+        this.name = name;
+        this.noiDung = noiDung;
+    }
 
-//	@NotNull
-//	private Long id;
+    public String getNoiDung() {
+        return noiDung;
+    }
 
-//    @NotNull
-//	private Long tour_id;
+    public void setNoiDung(String noiDung) {
+        this.noiDung = noiDung;
+    }
 
     public String getName() {
         return name;
@@ -24,4 +29,5 @@ public class LoaiTourRequest {
     public void setName(String name) {
         this.name = name;
     }
+
 }

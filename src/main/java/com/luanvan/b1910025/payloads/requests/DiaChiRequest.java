@@ -9,10 +9,10 @@ public class DiaChiRequest {
     private Long ward_id;
 
     @NotNull
-    private Long district_id;
+    private Long user_id;
 
-    @NotNull
-    private String diaChi;
+    @NotBlank
+    private String address;
 
     @NotBlank
     private String phone;
@@ -21,36 +21,45 @@ public class DiaChiRequest {
         return ward_id;
     }
 
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public void setWard_id(Long ward_id) {
         this.ward_id = ward_id;
     }
 
-    public Long getDistrict_id() {
-        return district_id;
-    }
-
-    public void setDistrict_id(Long district_id) {
-        this.district_id = district_id;
-    }
-
-    public String getDiaChi() {
-        return diaChi;
-    }
-
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
-    }
 
     public String getPhoneNumber() {
         return phone;
     }
 
-    public DiaChiRequest(@NotNull Long ward_id, @NotNull Long district_id,
-                         @NotBlank String diaChi,@NotBlank String phoneNumber) {
+    public DiaChiRequest(@NotNull Long ward_id, @NotBlank String address, @NotBlank String phone,
+                          @NotNull Long user_id) {
         this.ward_id = ward_id;
-        this.district_id = district_id;
-        this.diaChi = diaChi;
-        this.phone = phoneNumber;
+        this.address = address;
+        this.phone = phone;
+        this.user_id = user_id;
     }
 
     public void setPhoneNumber(String phoneNumber) {

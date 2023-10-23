@@ -1,23 +1,24 @@
 package com.luanvan.b1910025.models;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "diaChi")
+//@Data
+//@Builder
+//@AllArgsConstructor
 public class DiaChi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
-
-    @NotBlank(message = "Dia chi khong duoc trong")
     private String diaChi;
-
-    @NotBlank(message = "SDT khong duoc trong")
     private String phone;
 
     @JoinColumn(name = "ward_id")
@@ -25,18 +26,25 @@ public class DiaChi {
     private Ward ward;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+/*    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diaChi", orphanRemoval = true)
+    private List<HoaDon> invoices = new ArrayList<>();*/
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diaChi", orphanRemoval = true)
-    private List<HoaDon> hoaDonList = new ArrayList<>();
+    public Long getId() {
+        return id;
+    }
 
-    public String getDiachi() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDiaChi() {
         return diaChi;
     }
 
-    public void setDiachi(String diachi) {
-        this.diaChi = diachi;
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
     }
 
     public String getPhone() {
@@ -62,32 +70,27 @@ public class DiaChi {
     public void setUser(User user) {
         this.user = user;
     }
+/*
 
-    public List<HoaDon> getHoaDonList() {
-        return hoaDonList;
+    public List<HoaDon> getInvoices() {
+        return invoices;
     }
 
-    public void setHoaDonList(List<HoaDon> hoaDonList) {
-        this.hoaDonList = hoaDonList;
+    public void setInvoices(List<HoaDon> invoices) {
+        this.invoices = invoices;
+    }
+*/
+
+    public DiaChi() {
+
     }
 
-    public DiaChi(Long id, String diaChi, String phone, Ward ward, User user, List<HoaDon> hoaDonList) {
-        this.id = id;
-        this.diaChi = diaChi;
+
+    public DiaChi(String address, String phone, Ward ward, User user) {
+        this.diaChi = address;
         this.phone = phone;
         this.ward = ward;
         this.user = user;
-        this.hoaDonList = hoaDonList;
     }
 
-    public DiaChi() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

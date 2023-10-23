@@ -5,10 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookingRepo extends JpaRepository<Booking, Long> {
     List<Booking> findByUser_Id(Long userId);
 
-    Booking findByUser_IdAndTour_IdAndStatusDat(int userId, Long tourId, int statusDat);
+//    Booking findById(Long id);
+
+    Booking findByUser_IdAndTour_IdAndStatusDat(Long userId, Long tourId, int statusDat);
+
+    boolean existsById(Long id);
+
 }

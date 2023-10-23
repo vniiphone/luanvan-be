@@ -6,9 +6,17 @@ public class BookingRequest {
     private Long user_id;
     @NotNull
     private Long tour_id;
-    @NotNull
-    @Min(0)
+
+    @NotNull(message = "Số lượng vé is required")
+    @Min(value = 0, message = "Số lượng vé must be greater than or equal to 0")
+    @Max(value = 15, message = "Số lượng vé must be less than or equal to 15")
     private int soLuongVeDat;
+
+    public BookingRequest(Long user_id, Long tour_id, int soLuongVeDat) {
+        this.user_id = user_id;
+        this.tour_id = tour_id;
+        this.soLuongVeDat = soLuongVeDat;
+    }
 
     public Long getUser_id() {
         return user_id;
@@ -26,11 +34,11 @@ public class BookingRequest {
         this.tour_id = tour_id;
     }
 
-    public int getSoLuongVe() {
+    public int getSoLuongVeDat() {
         return soLuongVeDat;
     }
 
-    public void setSoLuongVe(int soLuongVe) {
-        this.soLuongVeDat = soLuongVe;
+    public void setSoLuongVeDat(int soLuongVeDat) {
+        this.soLuongVeDat = soLuongVeDat;
     }
 }

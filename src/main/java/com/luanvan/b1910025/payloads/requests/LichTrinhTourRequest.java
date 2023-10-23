@@ -1,42 +1,46 @@
 package com.luanvan.b1910025.payloads.requests;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LichTrinhTourRequest {
 
-    @Size(min = 1, message = "Phải có lịch trình chi tiết từng ngày")
-    private String lichTrinhChiTiet;
-
-    @NotNull(message = "KhachSan is required")
-    private Long khachSanId;
-
-    @NotBlank(message = "Phương tiện di chuyển trống")
+    @NotBlank(message = "Phương tiện is required")
     private String phuongTien;
 
-    @NotBlank(message = "Số thứ tự ngày của lịch trình")
+    @NotNull(message = "Số thứ tự lịch trình is required")
     private int sttLichTrinh;
 
-    @NotBlank(message = "Tên lịch trình: ngày thứ ...")
+    @NotBlank(message = "Tên lịch trình is required")
     private String tenLichTrinh;
 
-    @NotBlank(message = "Ghi chú lịch trình trống")
     private String ghiChu;
 
-    public String getLichTrinhChiTiet() {
-        return lichTrinhChiTiet;
-    }
+    @NotBlank(message = "Lịch trình chi tiết is required")
+    private String lichTrinhChiTiet;
 
-    public void setLichTrinhChiTiet(String lichTrinhChiTiet) {
-        this.lichTrinhChiTiet = lichTrinhChiTiet;
-    }
+    @NotNull
+    private Long tour_id;
 
-    public Long getKhachSanId() {
-        return khachSanId;
-    }
+    @NotNull(message = "Điểm Đến list is required")
+    private List<DiemDenRequest> diemDenRequests = new ArrayList<>();
 
-    public void setKhachSanId(Long khachSanId) {
-        this.khachSanId = khachSanId;
-    }
+//    @NotNull(message = "Khách Sạn request is required")
+    private KhachSanRequest khachSanRequest;
+
+    @NotNull(message = "Visible request")
+    private boolean visible;
+
+    @NotNull(message = "Visible nameKhachSan")
+    private String nameKhachSan;
+    @NotNull(message = "Visible diaChiKhachSan")
+    private String diaChiKhachSan;
+    @NotNull(message = "Visible giaPhongKhachSan")
+    private double giaPhongKhachSan;
+    @NotNull(message = "Visible phoneKhachSan")
+    private String phoneKhachSan;
 
     public String getPhuongTien() {
         return phuongTien;
@@ -68,5 +72,69 @@ public class LichTrinhTourRequest {
 
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
+    }
+
+    public String getLichTrinhChiTiet() {
+        return lichTrinhChiTiet;
+    }
+
+    public void setLichTrinhChiTiet(String lichTrinhChiTiet) {
+        this.lichTrinhChiTiet = lichTrinhChiTiet;
+    }
+
+    public Long getTour_id() {
+        return tour_id;
+    }
+
+    public void setTour_id(Long tour_id) {
+        this.tour_id = tour_id;
+    }
+
+    public List<DiemDenRequest> getDiemDenRequests() {
+        return diemDenRequests;
+    }
+
+    public void setDiemDenRequests(List<DiemDenRequest> diemDenRequests) {
+        this.diemDenRequests = diemDenRequests;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public String getNameKhachSan() {
+        return nameKhachSan;
+    }
+
+    public void setNameKhachSan(String nameKhachSan) {
+        this.nameKhachSan = nameKhachSan;
+    }
+
+    public String getDiaChiKhachSan() {
+        return diaChiKhachSan;
+    }
+
+    public void setDiaChiKhachSan(String diaChiKhachSan) {
+        this.diaChiKhachSan = diaChiKhachSan;
+    }
+
+    public double getGiaPhongKhachSan() {
+        return giaPhongKhachSan;
+    }
+
+    public void setGiaPhongKhachSan(double giaPhongKhachSan) {
+        this.giaPhongKhachSan = giaPhongKhachSan;
+    }
+
+    public String getPhoneKhachSan() {
+        return phoneKhachSan;
+    }
+
+    public void setPhoneKhachSan(String phoneKhachSan) {
+        this.phoneKhachSan = phoneKhachSan;
     }
 }

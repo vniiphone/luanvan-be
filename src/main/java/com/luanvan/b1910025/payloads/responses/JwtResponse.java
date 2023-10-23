@@ -3,18 +3,26 @@ package com.luanvan.b1910025.payloads.responses;
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
+
     private Long id;
     private String username;
     private String email;
     private String role;
+    private Boolean authenticated;
 
-    public JwtResponse(String token, String type, Long id, String username, String email, String role) {
-        this.token = token;
-        this.type = type;
+    public JwtResponse(String accessToken, Long id, String username, String email, String role) {
+        this.token = accessToken;
         this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
+    }
+    public JwtResponse(String accessToken){
+        this.token = accessToken;
+    }
+
+    public JwtResponse(boolean authenticated) {
+        this.authenticated = authenticated;
     }
 
     public String getToken() {

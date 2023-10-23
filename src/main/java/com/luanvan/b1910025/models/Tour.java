@@ -1,180 +1,160 @@
 package com.luanvan.b1910025.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.joda.time.DateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tour")
+@Data
+@Builder
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Tour {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
-
-    @NotBlank(message = "Name is required")
     private String name;
+    //    @ElementCollection
+    private String imageUrls;
+    //@ElementCollection
+    private String imagePublicIds;
 
 
-    @JsonIgnore
-    @JoinColumn(name = "loaiTour_id", nullable = false)
-    @ManyToOne
+    //    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loai_tour_id") // thông qua khóa ngoại loaiTour_id
     private LoaiTour loaiTour;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tour", orphanRemoval = true)
-    private List<Image> imagesList;
+    // Thêm trường mã tour và getter/setter cho nó
+    private String tourCode;
 
+    // Hàm tạo mã tour dựa trên định dạng và lưu vào tourCode
+    public void generateTourCode() {
+        // Đây là một ví dụ đơn giản, bạn có thể thay đổi định dạng dựa trên yêu cầu của bạn
+        String codeFormat = "TOUR-%d-%03d"; // Ví dụ: TOUR-2023-001
+        String formattedCode = String.format(codeFormat, LocalDate.now().getYear(), id);
+        tourCode = formattedCode;
+    }
+
+    @JsonIgnore    // MappedBy trỏ tới tên biến Tour ở trong Image.
+    @OneToMany(mappedBy = "tour",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
 
     //Một tour sẽ có 1 hoặc nhiều lịch trình tour:
     // ví dụ lịch trình ngày 1, lịch trình ngày 2
     // Nếu tour bị xóa, thì lịch trình cũng sẽ bị xóa: orphanRemoval = true
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tour", orphanRemoval = true)
-    private List<LichTrinhTour> lichTrinhTourList;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tour", orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private List<LichTrinhTour> lichTrinhTours = new ArrayList<>();
 
-    @NotBlank(message = "Phải có tóm tắt chuyến đi")
+    @JsonIgnore
+    @OneToMany(mappedBy = "tour")
+    private List<HoaDon> hoaDons = new ArrayList<>();
+    @Lob
     private String tomTat;
-
-    @NotBlank(message = "Phải có ngày xuất phát")
-    private DateTime ngayGioXuatPhat;
-
-    @NotBlank(message = "Phải có ngày về đến")
+    private String ngayGioXuatPhat;
     private String ngayVe;
-
-    @NotBlank(message = "Phải có nơi khởi hành")
     private String noiKhoiHanh;
-
-    @NotBlank(message = "Phải có giá tham khảo")
     private Double giaThamKhao;
-
-    @NotBlank(message = "Phải có số lượng vé")
     private int soLuongVe;
-
     private Boolean visible = Boolean.TRUE;
 
-    public Boolean getVisible() {
-        return visible;
+
+    //Khi tạo tour, không cần có sẵn lịch trình, lịch trình có thể thêm sau
+    public Tour() {
+        super();
     }
 
-    public void setVisible(Boolean visible) {
+
+    public Tour(String name,
+                String imageUrls,
+                String imagePublicIds,
+                LoaiTour loaiTour,
+                List<LichTrinhTour> lichTrinhTours,
+                String tomTat,
+                String ngayGioXuatPhat,
+                String ngayVe,
+                String noiKhoiHanh,
+                Double giaThamKhao,
+                int soLuongVe,
+                String tourCode,
+                Boolean visible) {
+        this.name = name;
+        this.imageUrls = imageUrls;
+        this.imagePublicIds = imagePublicIds;
+        this.loaiTour = loaiTour;
+        this.lichTrinhTours = lichTrinhTours;
+        this.tomTat = tomTat;
+        this.ngayGioXuatPhat = ngayGioXuatPhat;
+        this.ngayVe = ngayVe;
+        this.noiKhoiHanh = noiKhoiHanh;
+        this.giaThamKhao = giaThamKhao;
+        this.soLuongVe = soLuongVe;
+        this.tourCode = tourCode;
         this.visible = visible;
     }
 
-    public int getSoLuongVe() {
-        return soLuongVe;
-    }
-
-    public void setSoLuongVe(int soLuongVe) {
-        this.soLuongVe = soLuongVe;
-    }
-
-    //Khi tạo tour, không cần có sẵn lịch trình, lịch trình có thể thêm sau
-
-
-    public Tour(String name, LoaiTour loaiTour, List<Image> imagesList, String tomTat, DateTime ngayGioXuatPhat, String ngayVe, String noiKhoiHanh, Double giaThamKhao, int soLuongVe) {
+  /*  public Tour(String name, List<String> imageUrls, List<String> imagePublicIds, LoaiTour loaiTour, String tomTat, String ngayGioXuatPhat, String ngayVe, String noiKhoiHanh, Double giaThamKhao, int soLuongVe, Boolean visible) {
         this.name = name;
+        this.imageUrls = imageUrls;
+        this.imagePublicIds = imagePublicIds;
         this.loaiTour = loaiTour;
-        this.imagesList = imagesList;
         this.tomTat = tomTat;
         this.ngayGioXuatPhat = ngayGioXuatPhat;
         this.ngayVe = ngayVe;
         this.noiKhoiHanh = noiKhoiHanh;
         this.giaThamKhao = giaThamKhao;
         this.soLuongVe = soLuongVe;
-    }
+        this.visible = visible;
+    }*/
 
-    public List<Image> getImagesList() {
-        return imagesList;
-    }
-
-    public void setImagesList(List<Image> imagesList) {
-        this.imagesList = imagesList;
-    }
-
-    public String getTomTat() {
-        return tomTat;
-    }
-
-    public void setTomTat(String tomTat) {
-        this.tomTat = tomTat;
-    }
-
-    public DateTime getNgayGioXuatPhat() {
-        return ngayGioXuatPhat;
-    }
-
-    public void setNgayGioXuatPhat(DateTime ngayGioXuatPhat) {
-        this.ngayGioXuatPhat = ngayGioXuatPhat;
-    }
-
-    public String getNgayVe() {
-        return ngayVe;
-    }
-
-    public void setNgayVe(String ngayVe) {
-        this.ngayVe = ngayVe;
-    }
-
-    public String getNoiKhoiHanh() {
-        return noiKhoiHanh;
-    }
-
-    public void setNoiKhoiHanh(String noiKhoiHanh) {
-        this.noiKhoiHanh = noiKhoiHanh;
-    }
-
-    public Double getGiaThamKhao() {
-        return giaThamKhao;
-    }
-
-    public void setGiaThamKhao(Double giaThamKhao) {
-        this.giaThamKhao = giaThamKhao;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+   /*public Tour(
+            String name,
+            List<String> imageUrls,
+            LoaiTour loaiTour,
+            String tomTat,
+            String ngayGioXuatPhat,
+            String ngayVe,
+            String noiKhoiHanh,
+            Double giaThamKhao,
+            int soLuongVe) {
         this.name = name;
-    }
-
-    public LoaiTour getLoaiTour() {
-        return loaiTour;
-    }
-
-    public void setLoaiTour(LoaiTour loaiTour) {
+        this.imageUrls = imageUrls;
         this.loaiTour = loaiTour;
-    }
-
-
-    public List<LichTrinhTour> getLichTrinhTourList() {
-        return lichTrinhTourList;
-    }
-
-    public void setLichTrinhTourList(List<LichTrinhTour> lichTrinhTourList) {
-        this.lichTrinhTourList = lichTrinhTourList;
-    }
-
-    public String getTomtat() {
-        return tomTat;
-    }
-
-    public void setTomtat(String tomTat) {
         this.tomTat = tomTat;
-    }
+        this.ngayGioXuatPhat = ngayGioXuatPhat;
+        this.ngayVe = ngayVe;
+        this.noiKhoiHanh = noiKhoiHanh;
+        this.giaThamKhao = giaThamKhao;
+        this.soLuongVe = soLuongVe;
+    }*/
 
-    public Tour() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    @Override
+//    public String toString() {
+//        return "Tour{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", imageUrls=" + imageUrls +
+//                ", loaiTour=" + loaiTour +
+//                ", bookings=" + bookings +
+//                ", lichTrinhTours=" + lichTrinhTours +
+//                ", tomTat='" + tomTat + '\'' +
+//                ", ngayGioXuatPhat='" + ngayGioXuatPhat + '\'' +
+//                ", ngayVe='" + ngayVe + '\'' +
+//                ", noiKhoiHanh='" + noiKhoiHanh + '\'' +
+//                ", giaThamKhao=" + giaThamKhao +
+//                ", soLuongVe=" + soLuongVe +
+//                ", visible=" + visible +
+//                '}';
+//    }
 }

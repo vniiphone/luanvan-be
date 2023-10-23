@@ -2,77 +2,99 @@ package com.luanvan.b1910025.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "lichTrinhTour")
+@Data
+@Builder
+@AllArgsConstructor
 public class LichTrinhTour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "tour_id")
-    private Tour tour;
-
-    @Size(min = 1, message = "Phải có lịch trình chi tiết từng ngày")
-    private String lichTrinhChiTiet;
-
-    @JoinColumn(name = "khachSan_id")
-    @ManyToOne
-    private KhachSan khachSan;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lichTrinhTour", orphanRemoval = true)
-    private List<DiemDen> diemDen = new ArrayList<>();
-
-    @NotBlank(message = "Phương tiện di chuyển trống")
     private String phuongTien;
-
-    @NotBlank(message = "Số thứ tự ngày của lịch trình")
     private int sttLichTrinh;
-
-    @NotBlank(message = "Tên lịch trình: ngày thứ ...")
     private String tenLichTrinh;
-
-    @NotBlank(message = "Ghi chú lịch trình trống")
     private String ghiChu;
-
-
     private Boolean visible = Boolean.TRUE;
 
+    private String nameKhachSan;
+    private String diaChiKhachSan;
+    private double giaPhongKhachSan;
+    private String phoneKhachSan;
 
-    public LichTrinhTour() {
-    }
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tour_id") // thông qua khóa ngoại tourId
+    private Tour tour;
+//    @JsonIgnore
+    @Size(min = 1, message = "Phải có lịch trình chi tiết từng ngày")
+    private String lichTrinhChiTiet;
+//    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,
+            mappedBy = "lichTrinhTour", orphanRemoval = true)
+    private List<DiemDen> diemDen = new ArrayList<>();
+/*    @OneToOne(mappedBy = "lichTrinhTour", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private KhachSan khachSan;*/
 
-    public Tour getTour() {
-        return tour;
-    }
-
-    public void setTour(Tour tour) {
+    public LichTrinhTour(
+            String phuongTien,
+            int sttLichTrinh,
+            String tenLichTrinh,
+            String ghiChu,
+            String nameKhachSan,
+            String diaChiKhachSan,
+            double giaPhongKhachSan,
+            String phoneKhachSan,
+            Tour tour,
+            String lichTrinhChiTiet,
+            List<DiemDen> diemDen) {
+        this.phuongTien = phuongTien;
+        this.sttLichTrinh = sttLichTrinh;
+        this.tenLichTrinh = tenLichTrinh;
+        this.ghiChu = ghiChu;
+        this.nameKhachSan = nameKhachSan;
+        this.diaChiKhachSan = diaChiKhachSan;
+        this.giaPhongKhachSan = giaPhongKhachSan;
+        this.phoneKhachSan = phoneKhachSan;
         this.tour = tour;
-    }
-
-    public String getLichTrinhChiTiet() {
-        return lichTrinhChiTiet;
-    }
-
-    public void setLichTrinhChiTiet(String lichTrinhChiTiet) {
         this.lichTrinhChiTiet = lichTrinhChiTiet;
+        this.diemDen = diemDen;
     }
 
-    public KhachSan getKhachSan() {
-        return khachSan;
-    }
-
-    public void setKhachSan(KhachSan khachSan) {
+    /*    public LichTrinhTour(
+            String phuongTien,
+            int sttLichTrinh,
+            String tenLichTrinh,
+            String ghiChu,
+            Tour tour,
+            String lichTrinhChiTiet,
+            List<DiemDen> diemDen,
+            KhachSan khachSan) {
+        this.phuongTien = phuongTien;
+        this.sttLichTrinh = sttLichTrinh;
+        this.tenLichTrinh = tenLichTrinh;
+        this.ghiChu = ghiChu;
+        this.tour = tour;
+        this.lichTrinhChiTiet = lichTrinhChiTiet;
+        this.diemDen = diemDen;
         this.khachSan = khachSan;
+    }*/
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPhuongTien() {
@@ -99,6 +121,13 @@ public class LichTrinhTour {
         this.tenLichTrinh = tenLichTrinh;
     }
 
+    public String getGhiChu() {
+        return ghiChu;
+    }
+
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
+    }
 
     public Boolean getVisible() {
         return visible;
@@ -108,22 +137,65 @@ public class LichTrinhTour {
         this.visible = visible;
     }
 
-
-
-
-    public String getGhiChu() {
-        return ghiChu;
+    public String getNameKhachSan() {
+        return nameKhachSan;
     }
 
-    public void setGhiChu(String ghiChu) {
-        this.ghiChu = ghiChu;
+    public void setNameKhachSan(String nameKhachSan) {
+        this.nameKhachSan = nameKhachSan;
     }
 
-    public Long getId() {
-        return id;
+    public String getDiaChiKhachSan() {
+        return diaChiKhachSan;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDiaChiKhachSan(String diaChiKhachSan) {
+        this.diaChiKhachSan = diaChiKhachSan;
     }
+
+    public double getGiaPhongKhachSan() {
+        return giaPhongKhachSan;
+    }
+
+    public void setGiaPhongKhachSan(double giaPhongKhachSan) {
+        this.giaPhongKhachSan = giaPhongKhachSan;
+    }
+
+    public String getPhoneKhachSan() {
+        return phoneKhachSan;
+    }
+
+    public void setPhoneKhachSan(String phoneKhachSan) {
+        this.phoneKhachSan = phoneKhachSan;
+    }
+
+    public Tour getTour() {
+        return tour;
+    }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
+    }
+
+    public String getLichTrinhChiTiet() {
+        return lichTrinhChiTiet;
+    }
+
+    public void setLichTrinhChiTiet(String lichTrinhChiTiet) {
+        this.lichTrinhChiTiet = lichTrinhChiTiet;
+    }
+
+    public List<DiemDen> getDiemDen() {
+        return diemDen;
+    }
+
+    public void setDiemDen(List<DiemDen> diemDen) {
+        this.diemDen = diemDen;
+    }
+
+    public LichTrinhTour() {
+        super();
+    }
+
+
 }

@@ -1,60 +1,56 @@
 package com.luanvan.b1910025.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "booking")
+@Builder
+@AllArgsConstructor
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotBlank(message = "Phải có số lượng vé")
-    @Min(value = 1, message = "Số lượng vé phải lớn hơn 0")
-    @Max(value = 100, message = "Số lượng vé phải nhỏ hơn 10")
-    @Column(name = "soLuongVeDat", nullable = false)
-    private int soLuongVeDat;
-
-    //Thanh Toán - Chưa thanh toán
-    @Column(name = "statusDat", nullable = true)
+    private Integer soLuongVeDat;
+    //Thanh Toán: 1 - Chưa thanh toán: 0 - Chờ xác nhận: 2
     private int statusDat;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @ManyToOne
     private User user;
 
+//    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tour_id")
-    @ManyToOne
     private Tour tour;
-
-    @JoinColumn(name = "invoice_id")
+    @JsonIgnore
+    @JoinColumn(name = "hoaDon_id")
     @ManyToOne
     private HoaDon hoaDon;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "booking", orphanRemoval = true)
+    private List<HanhKhach> hanhKhachs = new ArrayList<>();
 
-    public Booking() {
+    public Long getId() {
+        return id;
     }
 
-    public Booking(int soLuongVeDat,
-                   User user,
-                   Tour tour) {
-        super();
-        this.soLuongVeDat = soLuongVeDat;
-        this.user = user;
-        this.tour = tour;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public int getSoLuongVeDat() {
+    public Integer getSoLuongVeDat() {
         return soLuongVeDat;
     }
 
-    public void setSoLuongVeDat(int soLuongVeDat) {
+    public void setSoLuongVeDat(Integer soLuongVeDat) {
         this.soLuongVeDat = soLuongVeDat;
     }
 
@@ -90,11 +86,23 @@ public class Booking {
         this.hoaDon = hoaDon;
     }
 
-    public Long getId() {
-        return id;
+    public List<HanhKhach> getHanhKhachs() {
+        return hanhKhachs;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setHanhKhachs(List<HanhKhach> hanhKhachs) {
+        this.hanhKhachs = hanhKhachs;
+    }
+
+
+    public Booking() {
+        super();
+    }
+
+    public Booking(User user, Tour tour, Integer soLuongVeDat) {
+        super();
+        this.soLuongVeDat = soLuongVeDat;
+        this.user = user;
+        this.tour = tour;
     }
 }
