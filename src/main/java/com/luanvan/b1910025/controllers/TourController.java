@@ -228,6 +228,27 @@ public class TourController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @GetMapping(value = "/show/{id}")
+    public ResponseEntity<ApiResponse> showTour(@PathVariable("id") Long id) {
+        try {
+            tourService.showTour(id);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @PutMapping("/setVisible/{id}")
+    public ResponseEntity<ApiResponse> setTourVisible(@PathVariable("id") Long id) {
+        try {
+            tourService.setTourVisible(id);
+            return new ResponseEntity<>(new ApiResponse(true, "success"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse(false,"Failed to update tour visibility"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.luanvan.b1910025.controllers;
 
 import com.luanvan.b1910025.models.Booking;
+import com.luanvan.b1910025.models.HoaDon;
 import com.luanvan.b1910025.payloads.requests.BookingRequest;
 import com.luanvan.b1910025.payloads.responses.BookingResponse;
 import com.luanvan.b1910025.payloads.responses.MsgResponse;
@@ -91,6 +92,18 @@ public class BookingController {
         try {
             bookingService.deteleBooking(id);
             return new ResponseEntity<>(null, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/getBookingByItemId/{bookingId}")
+    public ResponseEntity<Booking> getInvoiceByHoaDonId(@PathVariable("bookingId") long bookingId) {
+        try {
+            Booking booking = bookingService.getASingleBooking(bookingId);
+            return new ResponseEntity<>(booking, HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

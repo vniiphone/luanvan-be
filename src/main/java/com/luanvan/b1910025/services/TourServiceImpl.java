@@ -136,6 +136,19 @@ public class TourServiceImpl implements TourService {
         Optional<Tour> tour = tourRepo.findById(tourId);
         if (tour.isPresent()) {
             tour.get().setVisible(false);
+            tourRepo.save(tour.get());
+        } else {
+            throw new InvalidConfigurationPropertyValueException("tourId", tourId, "Not found");
+        }
+    }
+
+    @Override
+    public void showTour(Long tourId) {
+        Optional<Tour> tour = tourRepo.findById(tourId);
+        if (tour.isPresent()) {
+            tour.get().setVisible(true);
+            log.info("Tour " + tour.get().getVisible());
+            tourRepo.save(tour.get());
         } else {
             throw new InvalidConfigurationPropertyValueException("tourId", tourId, "Not found");
         }
@@ -177,5 +190,23 @@ public class TourServiceImpl implements TourService {
     @Override
     public List<Tour> getVisibleToursByLoaiTourId(Long loaiTourId) {
         return tourRepo.findTourByLoaiTourIdAndVisible(loaiTourId);
+    }
+
+    @Override
+    public void setTourVisible(Long id) {
+        // Truy vấn tour dựa trên ID.
+        Optional<Tour> optionalTour = tourRepo.findById(id);
+
+        if (optionalTour.isPresent()) {
+            Tour tour = optionalTour.get();
+
+            // Cập nhật trạng thái "visible" của tour.
+            tour.setVisible(true);
+
+            // Lưu thay đổi vào cơ sở dữ liệu.
+            tourRepo.save(tour);
+        } else {
+            throw new InvalidConfigurationPropertyValueException("tourId", id, "Not found");
+        }
     }
 }

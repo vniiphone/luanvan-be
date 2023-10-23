@@ -87,7 +87,15 @@ public class LichTrinhTourController {
             return ResponseEntity.badRequest().body("Error creating LTT: " + e.getMessage());
         }
     }
-
+    @PostMapping("/create-ltts")
+    public ResponseEntity<?> createLichTrinhTours(@RequestBody LichTrinhTourRequest lttRequests) {
+        try {
+                LichTrinhTour createdLTT = lichTrinhTourService.createLTT(lttRequests);
+            return ResponseEntity.ok(createdLTT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error creating Lich Trinh Tours: " + e.getMessage());
+        }
+    }
 /*    @PutMapping("/update/{id}")
     public ResponseEntity<Optional<LichTrinhTour>> updateLichTrinhTour(
             @PathVariable Long id,
@@ -138,7 +146,7 @@ public class LichTrinhTourController {
         }
     }*/
 
-    @PostMapping("/create-ltts")
+ /*   @PostMapping("/create-ltts")
     public ResponseEntity<?> createLichTrinhTours(@RequestBody List<LichTrinhTourRequest> lttRequests) {
         List<LichTrinhTour> createdLTTS = new ArrayList<>();
         try {
@@ -150,7 +158,8 @@ public class LichTrinhTourController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error creating Lich Trinh Tours: " + e.getMessage());
         }
-    }
+    } */
+
 
 
     @DeleteMapping(value = "/{id}")

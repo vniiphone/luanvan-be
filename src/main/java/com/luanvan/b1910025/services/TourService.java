@@ -17,6 +17,8 @@ public interface TourService {
 
     void deleteTour(Long tourId);
 
+    void showTour(Long tourId);
+
     Tour getASingleTour(Long tourId);
 
     Page<Tour> getAllTours(Optional<Integer> page, Optional<String> sortBy);
@@ -31,4 +33,5 @@ public interface TourService {
 
    List<Tour> getVisibleToursByLoaiTourId(Long loaiTourId) ;
 
+    void setTourVisible(Long id);
 }
